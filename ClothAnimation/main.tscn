@@ -1,0 +1,205 @@
+[gd_scene load_steps=9 format=3 uid="uid://dw67koele8ib7"]
+
+[ext_resource type="Script" path="res://main.gd" id="1_5fu25"]
+[ext_resource type="Script" path="res://UI.gd" id="1_xli06"]
+[ext_resource type="Script" path="res://FreeLookCamera.gd" id="2_hmrl4"]
+[ext_resource type="ButtonGroup" uid="uid://6om1hekvf113" path="res://groups/fixed_bg.tres" id="4_l4s7m"]
+[ext_resource type="ButtonGroup" uid="uid://dy2mmop4qrr2c" path="res://groups/integration_buttongroup.tres" id="4_mug54"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nma8q"]
+sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
+ground_bottom_color = Color(0.384314, 0.454902, 0.54902, 1)
+
+[sub_resource type="Sky" id="Sky_q23jy"]
+sky_material = SubResource("ProceduralSkyMaterial_nma8q")
+
+[sub_resource type="Environment" id="Environment_yct6r"]
+background_mode = 2
+sky = SubResource("Sky_q23jy")
+
+[node name="main" type="Node3D"]
+script = ExtResource("1_5fu25")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_yct6r")
+
+[node name="Cloth" type="Node3D" parent="."]
+
+[node name="FreeLookCamera" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.970105, 0.242684, 0, -0.242684, 0.970105, 0, 3.26482, 3.52792)
+script = ExtResource("2_hmrl4")
+
+[node name="UI" type="CanvasLayer" parent="."]
+script = ExtResource("1_xli06")
+
+[node name="MarginContainer" type="MarginContainer" parent="UI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/MarginContainer"]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="UI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/MarginContainer/HBoxContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Cloth settings
+"
+
+[node name="GridSettings" type="HBoxContainer" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/GridSettings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Size:"
+
+[node name="SizeXSpinBox" type="SpinBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/GridSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 3.0
+value = 3.0
+rounded = true
+suffix = "X"
+
+[node name="SizeYSpinBox" type="SpinBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/GridSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+min_value = 3.0
+value = 3.0
+rounded = true
+suffix = "Y"
+
+[node name="KSettings" type="HBoxContainer" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/KSettings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Spring coefficient K:"
+
+[node name="KSpinBox" type="SpinBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/KSettings"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1000.0
+value = 25.0
+
+[node name="DampingSettings" type="HBoxContainer" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/DampingSettings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Damping factor:"
+
+[node name="DampingSpinBox" type="SpinBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/DampingSettings"]
+layout_mode = 2
+min_value = 1.0
+value = 8.0
+
+[node name="MassSettings" type="HBoxContainer" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MassSettings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Point mass:"
+
+[node name="MassSpinBox" type="SpinBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MassSettings"]
+layout_mode = 2
+min_value = 0.1
+step = 0.1
+value = 1.5
+
+[node name="Label2" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Fixed points"
+
+[node name="TopRowCheckBox" type="CheckBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+button_group = ExtResource("4_l4s7m")
+text = "Top row"
+
+[node name="TopCornersCheckBox" type="CheckBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("4_l4s7m")
+text = "Top corners"
+
+[node name="SingleCornerCheckBox" type="CheckBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("4_l4s7m")
+text = "Single corner"
+
+[node name="IntLabel" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Integration method"
+
+[node name="EulerCheckBox" type="CheckBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+button_group = ExtResource("4_mug54")
+text = "Euler"
+
+[node name="VerletCheckBox" type="CheckBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+button_group = ExtResource("4_mug54")
+text = "Verlet"
+
+[node name="padding" type="Control" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RenderLabel" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Render settings"
+
+[node name="DrawLinesCheckBox" type="CheckBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Draw lines (laggy)"
+
+[node name="RestartButton" type="Button" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Restart"
+
+[node name="Control" type="Control" parent="UI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.0
+
+[connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/GridSettings/SizeXSpinBox" to="UI" method="_on_size_x_spin_box_value_changed"]
+[connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/GridSettings/SizeYSpinBox" to="UI" method="_on_size_y_spin_box_value_changed"]
+[connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/KSettings/KSpinBox" to="UI" method="_on_k_spin_box_value_changed"]
+[connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/DampingSettings/DampingSpinBox" to="UI" method="_on_damping_spin_box_value_changed"]
+[connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MassSettings/MassSpinBox" to="UI" method="_on_mass_spin_box_value_changed"]
+[connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/TopRowCheckBox" to="UI" method="_on_top_row_check_box_toggled"]
+[connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/TopCornersCheckBox" to="UI" method="_on_top_corners_check_box_toggled"]
+[connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/SingleCornerCheckBox" to="UI" method="_on_single_corner_check_box_toggled"]
+[connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/EulerCheckBox" to="UI" method="_on_euler_check_box_toggled"]
+[connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/VerletCheckBox" to="UI" method="_on_verlet_check_box_toggled"]
+[connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/DrawLinesCheckBox" to="UI" method="_on_draw_lines_check_box_toggled"]
+[connection signal="pressed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/RestartButton" to="UI" method="_on_restart_button_pressed"]
