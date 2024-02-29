@@ -34,10 +34,12 @@ func _on_draw_lines_check_box_toggled(toggled_on):
 func _on_euler_check_box_toggled(toggled_on):
 	if toggled_on:
 		Global.INTEGRATION_METHOD = 0
+		print("using euler")
 
 func _on_verlet_check_box_toggled(toggled_on):
 	if toggled_on:
 		Global.INTEGRATION_METHOD = 1
+		print("using verlet")
 
 func _on_top_corners_check_box_toggled(toggled_on):
 	if toggled_on:
@@ -50,3 +52,12 @@ func _on_top_row_check_box_toggled(toggled_on):
 func _on_single_corner_check_box_toggled(toggled_on):
 	if toggled_on:
 		Global.FIXED_POINTS = 2
+
+func _on_wind_spin_box_value_changed(value):
+	Global.WIND_STRENGTH = value
+
+func _on_shear_springs_check_box_toggled(toggled_on):
+	Global.SHEAR_SPRINGS = toggled_on
+
+func _on_bend_springs_check_box_toggled(toggled_on):
+	Global.BEND_SPRINGS = toggled_on

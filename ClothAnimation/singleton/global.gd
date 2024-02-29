@@ -8,6 +8,9 @@ var NODE_DISTANCE = 0.3 # Distance between points on the cloth
 var K = 25 # Spring constant
 var DAMPING = 8 # Damping amount
 var MASS = 1.0 # Mass of all points on the cloth
+var BEND_SPRINGS = true
+var SHEAR_SPRINGS = true
+var WIND_STRENGTH = 0.0
 
 enum{TOP_CORNERS, TOP_ROW, SINGLE_CORNER}
 var FIXED_POINTS = TOP_ROW

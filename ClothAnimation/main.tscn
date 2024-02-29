@@ -135,6 +135,16 @@ min_value = 0.1
 step = 0.1
 value = 1.5
 
+[node name="ShearSpringsCheckBox" type="CheckBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Shear springs"
+
+[node name="BendSpringsCheckBox" type="CheckBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Bend springs"
+
 [node name="Label2" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Fixed points"
@@ -170,6 +180,18 @@ layout_mode = 2
 button_group = ExtResource("4_mug54")
 text = "Verlet"
 
+[node name="WindSettings" type="HBoxContainer" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/WindSettings"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Wind strength: "
+
+[node name="WindSpinBox" type="SpinBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/WindSettings"]
+layout_mode = 2
+step = 0.1
+
 [node name="padding" type="Control" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -196,10 +218,13 @@ size_flags_stretch_ratio = 3.0
 [connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/KSettings/KSpinBox" to="UI" method="_on_k_spin_box_value_changed"]
 [connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/DampingSettings/DampingSpinBox" to="UI" method="_on_damping_spin_box_value_changed"]
 [connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MassSettings/MassSpinBox" to="UI" method="_on_mass_spin_box_value_changed"]
+[connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/ShearSpringsCheckBox" to="UI" method="_on_shear_springs_check_box_toggled"]
+[connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/BendSpringsCheckBox" to="UI" method="_on_bend_springs_check_box_toggled"]
 [connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/TopRowCheckBox" to="UI" method="_on_top_row_check_box_toggled"]
 [connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/TopCornersCheckBox" to="UI" method="_on_top_corners_check_box_toggled"]
 [connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/SingleCornerCheckBox" to="UI" method="_on_single_corner_check_box_toggled"]
 [connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/EulerCheckBox" to="UI" method="_on_euler_check_box_toggled"]
 [connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/VerletCheckBox" to="UI" method="_on_verlet_check_box_toggled"]
+[connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/WindSettings/WindSpinBox" to="UI" method="_on_wind_spin_box_value_changed"]
 [connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/DrawLinesCheckBox" to="UI" method="_on_draw_lines_check_box_toggled"]
 [connection signal="pressed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/RestartButton" to="UI" method="_on_restart_button_pressed"]
