@@ -6,7 +6,7 @@ enum{EULER, VERLET}
 # Dictionary containing all the cloth_node objects, with Vector2 objects as keys
 var meshgrid = {}
 
-var wind = 0.5
+var wind = 0.0
 var wind_dir = Vector3(0.3, 0, 0.8).normalized()
 
 # Called automatically when the main scene is ready
@@ -30,8 +30,8 @@ func process_forces(delta):
 			n.force = Vector3.ZERO
 			#if y < Global.GRID_Y-1:
 				# Gravity
-			if Global.WIND_STRENGTH > 0:
-				n.apply_force(wind_dir*Global.WIND_STRENGTH)
+			if wind > 0:
+				n.apply_force(wind_dir*wind)
 			n.apply_force(Vector3(0, -1, 0)*n.mass)
 			
 			for n_index in n.neighbors.size():
@@ -150,3 +150,11 @@ func draw_lines():
 				var n0 = meshgrid[Vector2(x,y)]
 				var n1 = meshgrid[Vector2(x,y+1)]
 				Draw3D.line(n0.position+cpos, n1.position+cpos, Color.WHITE_SMOKE, 1)
+
+
+func _on_wind_timer_timeout():
+	var next_time = randf_range(0.3, 2.0)
+	$WindTimer.wait_time = next_time
+	wind = Global.WIND_STRENGTH * randf_range(0.2, 1.8)
+	wind_dir += Vector3(randf_range(-0.2, 0.2), 0, randf_range(-0.2, 0.2))
+	wind_dir = wind_dir.normalized()
