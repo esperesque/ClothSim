@@ -1,10 +1,12 @@
 extends Node3D
 
 var cloth_node = preload("res://scenes/cloth_node.tscn")
+var quad_mesh = preload("res://geometry/quad_mesh.tscn")
 enum{EULER, VERLET}
 
 # Dictionary containing all the cloth_node objects, with Vector2 objects as keys
 var meshgrid = {}
+var quads = {}
 
 var wind = 0.0
 var wind_dir = Vector3(0.3, 0, 0.8).normalized()
@@ -15,6 +17,15 @@ func _ready():
 	
 	# Connect signals
 	Signals.restart_animation.connect(setup_cloth)
+	#test_quad_mesh()
+
+func test_quad_mesh():
+	var qm = quad_mesh.instantiate()
+	qm.v0 = Vector3(10, 10, 0)
+	qm.v1 = Vector3(10, 0, 0)
+	qm.v2 = Vector3(0, 0, 0)
+	qm.v3 = Vector3(0, 10, 0)
+	add_child(qm)
 
 # Called automatically every physics processing frame. delta is the time since the last frame
 func _physics_process(delta):
@@ -22,6 +33,8 @@ func _physics_process(delta):
 		
 	if Global.SHOW_LINES:
 		draw_lines()
+	if Global.SHOW_QUADS:
+		update_quads()
 
 func process_forces(delta):
 	for x in Global.GRID_X:
@@ -32,7 +45,12 @@ func process_forces(delta):
 				# Gravity
 			if wind > 0:
 				n.apply_force(wind_dir*wind)
-			n.apply_force(Vector3(0, -1, 0)*n.mass)
+			n.apply_force(Vector3(0, -1*9.82, 0)*n.mass)
+			
+			# damping
+			#var vdif = n.velocity - n.last_vel
+			#vdif = n.velocity
+			n.apply_force(-n.velocity*Global.DAMPING)
 			
 			for n_index in n.neighbors.size():
 				var n_coords = n.neighbors[n_index]
@@ -42,10 +60,8 @@ func process_forces(delta):
 				var norm = dvec.normalized()
 				var ext = d - n.neighbor_distance[n_index] # Spring extension
 				
-				var vdif = no.velocity - n.velocity
-				
 				n.apply_force(-norm*ext*Global.K) # spring force
-				n.apply_force(vdif*Global.DAMPING)
+				#n.apply_force(vdif*Global.DAMPING)
 
 			if Global.INTEGRATION_METHOD == EULER:
 				n.update_position(delta)
@@ -132,6 +148,26 @@ func setup_cloth():
 	#$Cloth.position = Vector3(0, Global.NODE_DISTANCE*Global.GRID_Y, 0)
 	$Cloth.position = Vector3(0, 2, 0)
 	
+	if Global.SHOW_QUADS:
+		quads = {}
+		for x in Global.GRID_X-1:
+			for y in Global.GRID_Y-1:
+				var qm = quad_mesh.instantiate()
+				qm.v0 = meshgrid[Vector2(x,y)].position
+				qm.v1 = meshgrid[Vector2(x,y+1)].position
+				qm.v2 = meshgrid[Vector2(x+1,y+1)].position
+				qm.v3 = meshgrid[Vector2(x+1,y)].position
+				
+				var w = 1.0 / float(Global.GRID_X)
+				var h = 1.0 / float(Global.GRID_Y)
+				
+				qm.uv_bl = Vector2(x*w, y*h) #0, 0
+				qm.uv_br = Vector2((x+1)*w, y*h) #1, 0
+				qm.uv_tr = Vector2((x+1)*w, (y+1)*h) #1, 1
+				qm.uv_tl = Vector2(x*w, (y+1)*h) #0, 1
+				$Cloth.add_child(qm)
+				quads[Vector2(x,y)] = qm
+	
 func draw_lines():
 	var cpos = $Cloth.position
 	for x in Global.GRID_X:
@@ -151,6 +187,15 @@ func draw_lines():
 				var n1 = meshgrid[Vector2(x,y+1)]
 				Draw3D.line(n0.position+cpos, n1.position+cpos, Color.WHITE_SMOKE, 1)
 
+func update_quads():
+	for x in Global.GRID_X-1:
+		for y in Global.GRID_Y-1:
+			var qm = quads[Vector2(x,y)]
+			qm.v0 = meshgrid[Vector2(x,y)].position
+			qm.v1 = meshgrid[Vector2(x,y+1)].position
+			qm.v2 = meshgrid[Vector2(x+1,y+1)].position
+			qm.v3 = meshgrid[Vector2(x+1,y)].position
+			qm.update()
 
 func _on_wind_timer_timeout():
 	var next_time = randf_range(0.3, 2.0)

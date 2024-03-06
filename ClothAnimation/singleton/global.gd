@@ -20,3 +20,4 @@ var INTEGRATION_METHOD = EULER
 
 # Render settings
 var SHOW_LINES = false
+var SHOW_QUADS = true

@@ -16,6 +16,8 @@ sky_material = SubResource("ProceduralSkyMaterial_nma8q")
 [sub_resource type="Environment" id="Environment_yct6r"]
 background_mode = 2
 sky = SubResource("Sky_q23jy")
+ambient_light_sky_contribution = 0.1
+ambient_light_energy = 0.1
 
 [node name="main" type="Node3D"]
 script = ExtResource("1_5fu25")
@@ -215,6 +217,17 @@ size_flags_stretch_ratio = 3.0
 
 [node name="WindTimer" type="Timer" parent="."]
 autostart = true
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.829642, -0.50225, 0.243799, 0.481875, 0.864722, 0.141604, -0.28194, 0, 0.959432, 149.779, 14.3843, 890.393)
+visible = false
+light_energy = 0.1
+light_indirect_energy = 0.0
+
+[node name="OmniLight3D" type="OmniLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 7, 8.957)
+light_energy = 5.0
+omni_range = 20.0
 
 [connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/GridSettings/SizeXSpinBox" to="UI" method="_on_size_x_spin_box_value_changed"]
 [connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/GridSettings/SizeYSpinBox" to="UI" method="_on_size_y_spin_box_value_changed"]

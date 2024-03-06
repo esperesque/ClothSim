@@ -4,6 +4,7 @@ var neighbors = []
 var neighbor_distance = []
 var force:Vector3 = Vector3.ZERO
 var velocity:Vector3 = Vector3.ZERO
+var last_vel = Vector3.ZERO
 var acceleration:Vector3 = Vector3.ZERO
 var last_pos:Vector3 = Vector3.ZERO # used for verlet
 var mass:float = 1.0
