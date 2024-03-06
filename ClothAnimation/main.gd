@@ -45,7 +45,7 @@ func process_forces(delta):
 				# Gravity
 			if wind > 0:
 				n.apply_force(wind_dir*wind)
-			n.apply_force(Vector3(0, -1*9.82, 0)*n.mass)
+			n.apply_force(Vector3(0, -1*9.82, 0))
 			
 			# damping
 			#var vdif = n.velocity - n.last_vel
@@ -62,7 +62,9 @@ func process_forces(delta):
 				
 				n.apply_force(-norm*ext*Global.K) # spring force
 				#n.apply_force(vdif*Global.DAMPING)
-
+	for x in Global.GRID_X:
+		for y in Global.GRID_Y:
+			var n = meshgrid[Vector2(x,y)]
 			if Global.INTEGRATION_METHOD == EULER:
 				n.update_position(delta)
 			elif Global.INTEGRATION_METHOD == VERLET:
@@ -129,19 +131,31 @@ func setup_cloth():
 						cn.neighbor_distance.append(Vector2(1, 1).length()*Global.NODE_DISTANCE)
 			
 			# Setup bend springs
-			if Global.BEND_SPRINGS:
-				if x > 1:
-					cn.neighbors.append(Vector2(x-2, y))
-					cn.neighbor_distance.append(2.0*Global.NODE_DISTANCE)
-				if x < Global.GRID_X-2:
-					cn.neighbors.append(Vector2(x+2, y))
-					cn.neighbor_distance.append(2.0*Global.NODE_DISTANCE)
-				if y > 1:
-					cn.neighbors.append(Vector2(x, y-2))
-					cn.neighbor_distance.append(2.0*Global.NODE_DISTANCE)
-				if y < Global.GRID_Y-2:
-					cn.neighbors.append(Vector2(x, y+2))
-					cn.neighbor_distance.append(2.0*Global.NODE_DISTANCE)
+				if Global.BEND_SPRINGS:
+					if x > 1:
+						cn.neighbors.append(Vector2(x-2, y))
+						cn.neighbor_distance.append(2.0*Global.NODE_DISTANCE)
+						if y > 1:
+							cn.neighbors.append(Vector2(x-2,y-2))
+							cn.neighbor_distance.append(sqrt(8)*Global.NODE_DISTANCE)
+						if y < Global.GRID_Y-2:
+							cn.neighbors.append(Vector2(x-2,y+2))
+							cn.neighbor_distance.append(sqrt(8)*Global.NODE_DISTANCE)
+					if y > 1:
+						cn.neighbors.append(Vector2(x, y-2))
+						cn.neighbor_distance.append(2.0*Global.NODE_DISTANCE)
+					if x < Global.GRID_X-2:
+						cn.neighbors.append(Vector2(x+2,y))
+						cn.neighbor_distance.append(2.0*Global.NODE_DISTANCE)
+						if y > 1:
+							cn.neighbors.append(Vector2(x+2,y-2))
+							cn.neighbor_distance.append(sqrt(8)*Global.NODE_DISTANCE)
+						if y < Global.GRID_Y-2:
+							cn.neighbors.append(Vector2(x+2,y+2))
+							cn.neighbor_distance.append(sqrt(8)*Global.NODE_DISTANCE)
+					if y < Global.GRID_Y-2:
+						cn.neighbors.append(Vector2(x,y+2))
+						cn.neighbor_distance.append(2.0*Global.NODE_DISTANCE)
 				
 			$Cloth.add_child(cn)
 			meshgrid[Vector2(x,y)] = cn
