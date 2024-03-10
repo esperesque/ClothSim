@@ -43,9 +43,9 @@ func process_forces(delta):
 			n.force = Vector3.ZERO
 			#if y < Global.GRID_Y-1:
 				# Gravity
-			if wind > 0:
-				n.apply_force(wind_dir*wind)
-			n.apply_force(Vector3(0, -1*9.82, 0))
+			if Global.WIND_STRENGTH > 0:
+				n.apply_force(Global.WIND_DIR*Global.WIND_STRENGTH)
+			n.apply_force(Vector3(0, -1*Global.GRAVITY, 0))
 			
 			# damping
 			#var vdif = n.velocity - n.last_vel

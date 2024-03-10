@@ -61,3 +61,9 @@ func _on_shear_springs_check_box_toggled(toggled_on):
 
 func _on_bend_springs_check_box_toggled(toggled_on):
 	Global.BEND_SPRINGS = toggled_on
+
+func _on_phys_fps_spin_box_value_changed(value):
+	Engine.physics_ticks_per_second = value
+
+func _on_gravity_spin_box_value_changed(value):
+	Global.GRAVITY = value

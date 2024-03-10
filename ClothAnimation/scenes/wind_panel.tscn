@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://bj0ryymdh14lp"]
+
+[ext_resource type="Script" path="res://scenes/wind_panel.gd" id="1_tweh5"]
+
+[node name="WindPanel" type="Panel"]
+custom_minimum_size = Vector2(280, 280)
+script = ExtResource("1_tweh5")
+
+[node name="WindLine" type="Line2D" parent="."]
+points = PackedVector2Array(67, 205, 210, 71)

@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://dw67koele8ib7"]
+[gd_scene load_steps=10 format=3 uid="uid://dw67koele8ib7"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_5fu25"]
 [ext_resource type="Script" path="res://UI.gd" id="1_xli06"]
 [ext_resource type="Script" path="res://FreeLookCamera.gd" id="2_hmrl4"]
 [ext_resource type="ButtonGroup" uid="uid://6om1hekvf113" path="res://groups/fixed_bg.tres" id="4_l4s7m"]
 [ext_resource type="ButtonGroup" uid="uid://dy2mmop4qrr2c" path="res://groups/integration_buttongroup.tres" id="4_mug54"]
+[ext_resource type="PackedScene" uid="uid://bj0ryymdh14lp" path="res://scenes/wind_panel.tscn" id="6_qo512"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nma8q"]
 sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
@@ -49,8 +50,8 @@ theme_override_constants/margin_bottom = 10
 layout_mode = 2
 
 [node name="Panel" type="Panel" parent="UI/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/MarginContainer/HBoxContainer/Panel"]
 layout_mode = 1
@@ -182,18 +183,6 @@ layout_mode = 2
 button_group = ExtResource("4_mug54")
 text = "Verlet"
 
-[node name="WindSettings" type="HBoxContainer" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
-layout_mode = 2
-
-[node name="Label" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/WindSettings"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "Wind strength: "
-
-[node name="WindSpinBox" type="SpinBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/WindSettings"]
-layout_mode = 2
-step = 0.1
-
 [node name="padding" type="Control" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -214,6 +203,68 @@ text = "Restart"
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_stretch_ratio = 3.0
+
+[node name="Panel2" type="Panel" parent="UI/MarginContainer/HBoxContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="UI/MarginContainer/HBoxContainer/Panel2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Physics settings"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Physics FPS:"
+
+[node name="PhysFpsSpinBox" type="SpinBox" parent="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+min_value = 10.0
+max_value = 60.0
+value = 60.0
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Gravity:"
+
+[node name="GravitySpinBox" type="SpinBox" parent="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+max_value = 1000.0
+step = 0.01
+value = 9.82
+
+[node name="Control" type="Control" parent="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Label2" type="Label" parent="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Wind control"
+
+[node name="WindPanel" parent="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer" instance=ExtResource("6_qo512")]
+layout_mode = 2
 
 [node name="WindTimer" type="Timer" parent="."]
 autostart = true
@@ -241,7 +292,8 @@ omni_range = 20.0
 [connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/SingleCornerCheckBox" to="UI" method="_on_single_corner_check_box_toggled"]
 [connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/EulerCheckBox" to="UI" method="_on_euler_check_box_toggled"]
 [connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/VerletCheckBox" to="UI" method="_on_verlet_check_box_toggled"]
-[connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/WindSettings/WindSpinBox" to="UI" method="_on_wind_spin_box_value_changed"]
 [connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/DrawLinesCheckBox" to="UI" method="_on_draw_lines_check_box_toggled"]
 [connection signal="pressed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/RestartButton" to="UI" method="_on_restart_button_pressed"]
+[connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer/PhysFpsSpinBox" to="UI" method="_on_phys_fps_spin_box_value_changed"]
+[connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer2/GravitySpinBox" to="UI" method="_on_gravity_spin_box_value_changed"]
 [connection signal="timeout" from="WindTimer" to="." method="_on_wind_timer_timeout"]
