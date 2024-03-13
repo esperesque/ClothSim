@@ -1,6 +1,17 @@
-[gd_scene load_steps=2 format=3 uid="uid://dajoegddmulth"]
+[gd_scene load_steps=4 format=3 uid="uid://dajoegddmulth"]
 
 [ext_resource type="Script" path="res://scenes/cloth_node.gd" id="1_2unvn"]
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6fhg3"]
+albedo_color = Color(0.466667, 0.980392, 0.952941, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_vdehh"]
+material = SubResource("StandardMaterial3D_6fhg3")
+radius = 0.03
+height = 0.06
+
 [node name="ClothNode" type="MeshInstance3D"]
 script = ExtResource("1_2unvn")
+
+[node name="PointMarker" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_vdehh")

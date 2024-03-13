@@ -9,7 +9,14 @@ var acceleration:Vector3 = Vector3.ZERO
 var last_pos:Vector3 = Vector3.ZERO # used for verlet
 var mass:float = 1.0
 
+var in_ball_scene = false
 var fixed = false # If true, the position does not change
+
+func _ready():
+	Signals.show_points.connect(show_marker)
+
+func show_marker(b:bool):
+	$PointMarker.visible = b
 
 func apply_force(f:Vector3):
 	force += f

@@ -1,4 +1,4 @@
-[gd_scene load_steps=10 format=3 uid="uid://dw67koele8ib7"]
+[gd_scene load_steps=7 format=3 uid="uid://dw67koele8ib7"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_5fu25"]
 [ext_resource type="Script" path="res://UI.gd" id="1_xli06"]
@@ -7,26 +7,10 @@
 [ext_resource type="ButtonGroup" uid="uid://dy2mmop4qrr2c" path="res://groups/integration_buttongroup.tres" id="4_mug54"]
 [ext_resource type="PackedScene" uid="uid://bj0ryymdh14lp" path="res://scenes/wind_panel.tscn" id="6_qo512"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_nma8q"]
-sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
-ground_bottom_color = Color(0.384314, 0.454902, 0.54902, 1)
-
-[sub_resource type="Sky" id="Sky_q23jy"]
-sky_material = SubResource("ProceduralSkyMaterial_nma8q")
-
-[sub_resource type="Environment" id="Environment_yct6r"]
-background_mode = 2
-sky = SubResource("Sky_q23jy")
-ambient_light_sky_contribution = 0.1
-ambient_light_energy = 0.1
-
 [node name="main" type="Node3D"]
 script = ExtResource("1_5fu25")
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_yct6r")
-
-[node name="Cloth" type="Node3D" parent="."]
+[node name="scene" type="Node3D" parent="."]
 
 [node name="FreeLookCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 0.970105, 0.242684, 0, -0.242684, 0.970105, 0, 3.26482, 3.52792)
@@ -120,6 +104,7 @@ size_flags_horizontal = 3
 text = "Damping factor:"
 
 [node name="DampingSpinBox" type="SpinBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/DampingSettings"]
+unique_name_in_owner = true
 layout_mode = 2
 min_value = 1.0
 value = 8.0
@@ -133,6 +118,7 @@ size_flags_horizontal = 3
 text = "Point mass:"
 
 [node name="MassSpinBox" type="SpinBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/MassSettings"]
+unique_name_in_owner = true
 layout_mode = 2
 min_value = 0.1
 step = 0.1
@@ -191,18 +177,41 @@ size_flags_vertical = 3
 layout_mode = 2
 text = "Render settings"
 
+[node name="DrawPointsCB" type="CheckBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+button_pressed = true
+text = "Draw points"
+
 [node name="DrawLinesCheckBox" type="CheckBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Draw lines (laggy)"
+
+[node name="DrawTextureCB" type="CheckBox" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Draw texture"
 
 [node name="RestartButton" type="Button" parent="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer"]
 layout_mode = 2
 text = "Restart"
 
+[node name="Control2" type="Control" parent="UI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="OptionButton" type="OptionButton" parent="UI/MarginContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+item_count = 2
+selected = 0
+popup/item_0/text = "Default Scene"
+popup/item_0/id = 0
+popup/item_1/text = "Ball Scene"
+popup/item_1/id = 1
+
 [node name="Control" type="Control" parent="UI/MarginContainer/HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
-size_flags_stretch_ratio = 3.0
 
 [node name="Panel2" type="Panel" parent="UI/MarginContainer/HBoxContainer"]
 custom_minimum_size = Vector2(300, 0)
@@ -266,9 +275,6 @@ text = "Wind control"
 [node name="WindPanel" parent="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer" instance=ExtResource("6_qo512")]
 layout_mode = 2
 
-[node name="WindTimer" type="Timer" parent="."]
-autostart = true
-
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.829642, -0.50225, 0.243799, 0.481875, 0.864722, 0.141604, -0.28194, 0, 0.959432, 149.779, 14.3843, 890.393)
 visible = false
@@ -292,8 +298,9 @@ omni_range = 20.0
 [connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/SingleCornerCheckBox" to="UI" method="_on_single_corner_check_box_toggled"]
 [connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/EulerCheckBox" to="UI" method="_on_euler_check_box_toggled"]
 [connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/VerletCheckBox" to="UI" method="_on_verlet_check_box_toggled"]
+[connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/DrawPointsCB" to="UI" method="_on_draw_points_cb_toggled"]
 [connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/DrawLinesCheckBox" to="UI" method="_on_draw_lines_check_box_toggled"]
+[connection signal="toggled" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/DrawTextureCB" to="UI" method="_on_draw_texture_cb_toggled"]
 [connection signal="pressed" from="UI/MarginContainer/HBoxContainer/Panel/MarginContainer/VBoxContainer/RestartButton" to="UI" method="_on_restart_button_pressed"]
 [connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer/PhysFpsSpinBox" to="UI" method="_on_phys_fps_spin_box_value_changed"]
 [connection signal="value_changed" from="UI/MarginContainer/HBoxContainer/Panel2/MarginContainer/VBoxContainer/HBoxContainer2/GravitySpinBox" to="UI" method="_on_gravity_spin_box_value_changed"]
-[connection signal="timeout" from="WindTimer" to="." method="_on_wind_timer_timeout"]

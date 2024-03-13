@@ -6,6 +6,9 @@ var next_grid_y = Global.GRID_Y
 func _ready():
 	%SizeXSpinBox.value = Global.GRID_X
 	%SizeYSpinBox.value = Global.GRID_Y
+	%KSpinBox.value = Global.K
+	%DampingSpinBox.value = Global.DAMPING
+	%MassSpinBox.value = Global.MASS
 
 func _on_restart_button_pressed():
 	Global.GRID_X = next_grid_x
@@ -34,12 +37,10 @@ func _on_draw_lines_check_box_toggled(toggled_on):
 func _on_euler_check_box_toggled(toggled_on):
 	if toggled_on:
 		Global.INTEGRATION_METHOD = 0
-		print("using euler")
 
 func _on_verlet_check_box_toggled(toggled_on):
 	if toggled_on:
 		Global.INTEGRATION_METHOD = 1
-		print("using verlet")
 
 func _on_top_corners_check_box_toggled(toggled_on):
 	if toggled_on:
@@ -67,3 +68,10 @@ func _on_phys_fps_spin_box_value_changed(value):
 
 func _on_gravity_spin_box_value_changed(value):
 	Global.GRAVITY = value
+
+func _on_draw_points_cb_toggled(toggled_on):
+	Global.SHOW_POINTS = toggled_on
+	Signals.show_points.emit(toggled_on)
+
+func _on_draw_texture_cb_toggled(toggled_on):
+	Global.SHOW_TEXTURE = toggled_on

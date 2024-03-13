@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://cnp0mkiuwkwts"]
+
+[ext_resource type="PackedScene" uid="uid://bhlwmt4ekrr1f" path="res://scenes/cloth.tscn" id="1_4ma4l"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ypgpn"]
+sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
+ground_bottom_color = Color(0.384314, 0.454902, 0.54902, 1)
+
+[sub_resource type="Sky" id="Sky_q23jy"]
+sky_material = SubResource("ProceduralSkyMaterial_ypgpn")
+
+[sub_resource type="Environment" id="Environment_af8cs"]
+background_mode = 2
+sky = SubResource("Sky_q23jy")
+ambient_light_sky_contribution = 0.1
+ambient_light_energy = 0.1
+
+[node name="TestScene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_af8cs")
+
+[node name="Cloth" parent="." instance=ExtResource("1_4ma4l")]

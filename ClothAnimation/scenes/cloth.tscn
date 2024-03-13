@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://bhlwmt4ekrr1f"]
+
+[ext_resource type="Script" path="res://scenes/cloth.gd" id="1_dplyn"]
+
+[node name="Cloth" type="Node3D"]
+script = ExtResource("1_dplyn")
+
+[node name="texture" type="Node3D" parent="."]

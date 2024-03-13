@@ -1,0 +1,29 @@
+[gd_scene load_steps=6 format=3 uid="uid://cega58hba5pi5"]
+
+[ext_resource type="PackedScene" uid="uid://bhlwmt4ekrr1f" path="res://scenes/cloth.tscn" id="1_wc5qs"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_vjbdy"]
+sky_top_color = Color(0.384314, 0.454902, 0.54902, 1)
+ground_bottom_color = Color(0.384314, 0.454902, 0.54902, 1)
+
+[sub_resource type="Sky" id="Sky_5i8bc"]
+sky_material = SubResource("ProceduralSkyMaterial_vjbdy")
+
+[sub_resource type="Environment" id="Environment_cjv1p"]
+background_mode = 2
+sky = SubResource("Sky_5i8bc")
+ambient_light_sky_contribution = 0.1
+ambient_light_energy = 0.1
+
+[sub_resource type="SphereMesh" id="SphereMesh_m4x4r"]
+
+[node name="BallScene" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_cjv1p")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("SphereMesh_m4x4r")
+
+[node name="Cloth" parent="." instance=ExtResource("1_wc5qs")]
+cloth_ver = 1

@@ -4,32 +4,21 @@ var cloth_node = preload("res://scenes/cloth_node.tscn")
 var quad_mesh = preload("res://geometry/quad_mesh.tscn")
 enum{EULER, VERLET}
 
-# Dictionary containing all the cloth_node objects, with Vector2 objects as keys
+@export var cloth_ver:int = 0
+
 var meshgrid = {}
 var quads = {}
 
-var wind = 0.0
-var wind_dir = Vector3(0.3, 0, 0.8).normalized()
-var scene0 = preload("res://scenes/test_scene.tscn")
-var scene1 = preload("res://scenes/ball_scene.tscn")
-
-# Called automatically when the main scene is ready
-func _ready():
-	var scn = scene0.instantiate()
-	$scene.add_child(scn)
-	#setup_cloth()
-	
-	# Connect signals
-	#Signals.restart_animation.connect(setup_cloth)
-
 # Called automatically every physics processing frame. delta is the time since the last frame
-#func _physics_process(delta):
-	#process_forces(delta)
-		#
-	#if Global.SHOW_LINES:
-		#draw_lines()
-	#if Global.SHOW_QUADS:
-		#update_quads()
+func _physics_process(delta):
+	process_forces(delta)
+	if Global.SHOW_TEXTURE:
+		show_tex(true)
+		update_quads()
+	else:
+		show_tex(false)
+	if Global.SHOW_LINES:
+		draw_lines()
 
 func process_forces(delta):
 	for x in Global.GRID_X:
@@ -66,12 +55,25 @@ func process_forces(delta):
 				n.update_acceleration()
 				var verlet_results = Math.verlet(n.position, n.last_pos, n.acceleration, delta)
 				n.last_pos = verlet_results[0]
-				n.position = verlet_results[1]
+				if n.in_ball_scene:
+					if (verlet_results[1]+position).distance_to(Vector3.ZERO) > 0.7:
+						n.position = verlet_results[1]
+					else:
+						n.position = verlet_results[0]
+				else:
+					n.position = verlet_results[1]
 				n.velocity = verlet_results[2]
+
+func _ready():
+	Signals.restart_animation.connect(setup_cloth)
+	setup_cloth()
 
 func setup_cloth():
 	# Remove current cloth
-	for c in $sceneContainer/Cloth.get_children():
+	for c in get_children():
+		if c.name != "texture":
+			c.queue_free()
+	for c in $texture.get_children():
 		c.queue_free()
 	# Reset the meshgrid dictionary
 	meshgrid = {}
@@ -79,19 +81,24 @@ func setup_cloth():
 	for x in Global.GRID_X:
 		for y in Global.GRID_Y:
 			var cn = cloth_node.instantiate()
-			cn.position = Vector3(x*Global.NODE_DISTANCE, y*Global.NODE_DISTANCE, 0)
+			if cloth_ver == 0:
+				cn.position = Vector3(x*Global.NODE_DISTANCE, y*Global.NODE_DISTANCE, 0)
+			elif cloth_ver == 1:
+				cn.position = Vector3(x*Global.NODE_DISTANCE, 0, -y*Global.NODE_DISTANCE)
+				cn.in_ball_scene = true
 			cn.last_pos = cn.position
 			cn.mass = Global.MASS
-			match Global.FIXED_POINTS:
-				0:
-					if y == Global.GRID_Y - 1 and (x == 0 or x == Global.GRID_X - 1):
-						cn.fixed = true
-				1:
-					if y == Global.GRID_Y - 1:
-						cn.fixed = true
-				2:
-					if y == Global.GRID_Y - 1 and x == Global.GRID_X - 1:
-						cn.fixed = true
+			if cloth_ver == 0:
+				match Global.FIXED_POINTS:
+					0:
+						if y == Global.GRID_Y - 1 and (x == 0 or x == Global.GRID_X - 1):
+							cn.fixed = true
+					1:
+						if y == Global.GRID_Y - 1:
+							cn.fixed = true
+					2:
+						if y == Global.GRID_Y - 1 and x == Global.GRID_X - 1:
+							cn.fixed = true
 	
 			# Setup structural springs
 			if x > 0:
@@ -152,10 +159,10 @@ func setup_cloth():
 						cn.neighbors.append(Vector2(x,y+2))
 						cn.neighbor_distance.append(2.0*Global.NODE_DISTANCE)
 				
-			$sceneContainer/Cloth.add_child(cn)
+			add_child(cn)
 			meshgrid[Vector2(x,y)] = cn
 	#$Cloth.position = Vector3(0, Global.NODE_DISTANCE*Global.GRID_Y, 0)
-	$sceneContainer/Cloth.position = Vector3(0, 2, 0)
+	position = Vector3(-1.5, 2, 1.5)
 	
 	#if Global.SHOW_QUADS:
 	quads = {}
@@ -174,8 +181,21 @@ func setup_cloth():
 			qm.uv_br = Vector2((x+1)*w, y*h) #1, 0
 			qm.uv_tr = Vector2((x+1)*w, (y+1)*h) #1, 1
 			qm.uv_tl = Vector2(x*w, (y+1)*h) #0, 1
-			$sceneContainer/Cloth.add_child(qm)
+			$texture.add_child(qm)
 			quads[Vector2(x,y)] = qm
+
+func update_quads():
+	for x in Global.GRID_X-1:
+		for y in Global.GRID_Y-1:
+			var qm = quads[Vector2(x,y)]
+			qm.v0 = meshgrid[Vector2(x,y)].position
+			qm.v1 = meshgrid[Vector2(x,y+1)].position
+			qm.v2 = meshgrid[Vector2(x+1,y+1)].position
+			qm.v3 = meshgrid[Vector2(x+1,y)].position
+			qm.update()
+
+func show_tex(b):
+	$texture.visible = b
 	
 func draw_lines():
 	var cpos = position
@@ -195,13 +215,3 @@ func draw_lines():
 				var n0 = meshgrid[Vector2(x,y)]
 				var n1 = meshgrid[Vector2(x,y+1)]
 				Draw3D.line(n0.position+cpos, n1.position+cpos, Color.WHITE_SMOKE, 1)
-
-func update_quads():
-	for x in Global.GRID_X-1:
-		for y in Global.GRID_Y-1:
-			var qm = quads[Vector2(x,y)]
-			qm.v0 = meshgrid[Vector2(x,y)].position
-			qm.v1 = meshgrid[Vector2(x,y+1)].position
-			qm.v2 = meshgrid[Vector2(x+1,y+1)].position
-			qm.v3 = meshgrid[Vector2(x+1,y)].position
-			qm.update()
