@@ -12,7 +12,7 @@ var uv_tr:Vector2
 var uv_br:Vector2 # Bottom-right UV
 var uv_bl:Vector2
 
-var tex = load("res://textures/old_map2.jpg")
+var tex = load("res://textures/carpet1.png")
 
 func _ready():
 	mesh = ArrayMesh.new()
